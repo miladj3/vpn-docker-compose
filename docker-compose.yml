@@ -1,5 +1,7 @@
+version: '3.3'
 services:
   pptp:
+    env_file: .env
     image: mmontagna/docker-vpn-pptp:latest
     container_name: pptp
     privileged: true
@@ -8,6 +10,7 @@ services:
     environment:
       - client=${PPTP_USER_LIST}
   l2tp:
+    env_file: .env
     image: fcojean/l2tp-ipsec-vpn-server:latest
     container_name: l2tp
     privileged: true
@@ -21,6 +24,7 @@ services:
       - VPN_IPSEC_PSK=${L2TP_IPSEC_PSK}
       - VPN_USER_CREDENTIAL_LIST=${L2TP_USER_LIST}
   openconnect:
+    env_file: .env
     image: quay.io/aminvakil/ocserv:latest
     container_name: openconnect
     restart: always
@@ -37,6 +41,7 @@ services:
       - SRV_DAYS=${OPENCONNECT_SRV_DAYS}
       - NO_TEST_USER=${OPENCONNECT_NO_TEST_USER}
   mtproto:
+    env_file: .env
     image: telegrammessenger/proxy:latest
     container_name: mtproto
     restart: always
@@ -44,3 +49,21 @@ services:
       - ${MTPROTO_PORT}:443
     environment:
       - SECRET_COUNT=${MTPROTO_SECRET_COUNT}
+  sstp:
+    env_file: .env
+    image: fernandezcuesta/softethervpn:latest
+    container_name: sstp
+    restart: always
+    ports:
+      - ${SSTP_L2TP_PORT_500}:500/udp
+      - ${SSTP_L2TP_PORT_4500}:4500/udp
+      - ${SSTP_L2TP_PORT_1701}:1701/tcp
+      - ${SSTP_OPENVPN_PORT}:1194/udp
+      - ${SSTP_PORT}:443/tcp
+    environment:
+      - PSK=${L2TP_IPSEC_PSK}
+      - USERNAME=milad
+      - PASSWORD=Heaven3387
+      - SERVER_PWD=Heaven3387
+      - OPENVPN_ENABLED=true
+      - SSTP_ENABLED=true
