@@ -1,5 +1,11 @@
 # vpn-docker-compose
 
+https://www.the-digital-life.com/wireguard-docker/
+
+Guide: How to Set Up and Use IKEv2 VPN:
+
+  > https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/ikev2-howto.md
+
 remove env.sample to .env after upload to server
 
 CONFIG SSTP: 
