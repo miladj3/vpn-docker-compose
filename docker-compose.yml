@@ -49,6 +49,7 @@ services:
       - ${MTPROTO_PORT}:443
     environment:
       - SECRET_COUNT=${MTPROTO_SECRET_COUNT}
+      - SECRET=${MTPROTO_SECRET}
   sstp:
     env_file: .env
     image: fernandezcuesta/softethervpn:latest
@@ -63,8 +64,8 @@ services:
     environment:
       - PSK=${L2TP_IPSEC_PSK}
       - USERNAME=milad
-      - PASSWORD=Heaven3387
-      - SERVER_PWD=Heaven3387
+      - PASSWORD=P@SSWORD
+      - SERVER_PWD=P@SSWORD
       - OPENVPN_ENABLED=true
       - SSTP_ENABLED=true
   wireguard:
@@ -90,3 +91,23 @@ services:
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
+  shadowsocks:
+    image: shadowsocks/shadowsocks-libev:latest
+    container_name: shadow_socks
+    restart: always
+    ports:
+      - "8888:8388/tcp"
+      - "8888:8388/udp"
+    environment:
+      - PASSWORD=P@SSWORD
+      - METHOD=aes-256-gcm
+      - DNS_ADDRS=1.1.1.1,8.8.8.8
+  proxy:
+    image: datadog/squid
+    container_name: proxy_squid
+    ports:
+      - "8181:3128"
+    volumes:
+      - ./squid.conf:/etc/squid/squid.conf
+      - ./passwords:/etc/squid/passwords
+    restart: always
