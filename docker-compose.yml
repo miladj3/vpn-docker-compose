@@ -169,8 +169,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-      restart: always
-      ulimits:
-        nofile:
-          soft: 1024000
-          hard: 1024000
+    restart: always
+    ulimits:
+      nofile:
+        soft: 1024000
+        hard: 1024000
