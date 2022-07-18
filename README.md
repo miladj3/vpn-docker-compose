@@ -3,9 +3,9 @@
 https://www.the-digital-life.com/wireguard-docker/
 
 WireGuard:
-> docker exec -it wireguard wg
-> docker exec -it wireguard /app/show-peer 1
-> nano /opt/wireguard-server/config/wg0.conf
+  > docker exec -it wireguard wg
+  > docker exec -it wireguard /app/show-peer 1
+  > nano /opt/wireguard-server/config/wg0.conf
 
 Guide: How to Set Up and Use IKEv2 VPN:
 
