@@ -83,7 +83,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
-      - SERVERURL=51.83.232.97 #optional
+      - SERVERURL=auto #optional
       - SERVERPORT=51820 #optional
       - PEERS=1 #optional
       - PEERDNS=auto #optional
@@ -161,4 +161,4 @@ services:
       - "53:53/udp"
     restart: always
     environment:
-      - PUB_IP=51.83.232.97
+      - PUB_IP=127.0.0.1
