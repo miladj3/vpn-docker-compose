@@ -9,6 +9,7 @@ services:
     network_mode: host
     environment:
       - client=${PPTP_USER_LIST}
+
   l2tp:
     env_file: .env
     image: fcojean/l2tp-ipsec-vpn-server:latest
@@ -16,13 +17,14 @@ services:
     privileged: true
     restart: always
     ports:
-      - 500:500/udp
-      - 4500:4500/udp
+      - 510:500/udp
+      - 4510:4500/udp
     volumes:
       - /lib/modules:/lib/modules:ro
     environment:
       - VPN_IPSEC_PSK=${L2TP_IPSEC_PSK}
       - VPN_USER_CREDENTIAL_LIST=${L2TP_USER_LIST}
+
   openconnect:
     env_file: .env
     image: quay.io/aminvakil/ocserv:latest
@@ -40,6 +42,7 @@ services:
       - SRV_ORG=${OPENCONNECT_SRV_ORG}
       - SRV_DAYS=${OPENCONNECT_SRV_DAYS}
       - NO_TEST_USER=${OPENCONNECT_NO_TEST_USER}
+
   mtproto:
     env_file: .env
     image: telegrammessenger/proxy:latest
@@ -50,6 +53,7 @@ services:
     environment:
       - SECRET_COUNT=${MTPROTO_SECRET_COUNT}
       - SECRET=${MTPROTO_SECRET}
+
   sstp:
     env_file: .env
     image: fernandezcuesta/softethervpn:latest
@@ -68,6 +72,7 @@ services:
       - SERVER_PWD=P@SSWORD
       - OPENVPN_ENABLED=true
       - SSTP_ENABLED=true
+
   wireguard:
     image: linuxserver/wireguard
     container_name: wireguard
@@ -78,7 +83,7 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
-      - SERVERURL=wireguard.domain.com #optional
+      - SERVERURL=51.83.232.97 #optional
       - SERVERPORT=51820 #optional
       - PEERS=1 #optional
       - PEERDNS=auto #optional
@@ -91,6 +96,7 @@ services:
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
+
   shadowsocks:
     image: shadowsocks/shadowsocks-libev:latest
     container_name: shadow_socks
@@ -99,9 +105,10 @@ services:
       - "8888:8388/tcp"
       - "8888:8388/udp"
     environment:
-      - PASSWORD=P@SSWORD
-      - METHOD=aes-256-gcm
+      - PASSWORD=Heaven3387
+      - METHOD=chacha20-ietf-poly1305
       - DNS_ADDRS=1.1.1.1,8.8.8.8
+
   proxy:
     image: datadog/squid
     container_name: proxy_squid
@@ -111,3 +118,47 @@ services:
       - ./squid.conf:/etc/squid/squid.conf
       - ./passwords:/etc/squid/passwords
     restart: always
+
+  mikrotik:
+    image: evilfreelancer/docker-routeros:6.46.5
+    container_name: mikrotik
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    ports:
+      - "22280:80"
+      - "28080:8080"
+      - "22221:21"
+      - "22222:22"
+      - "22223:23"
+      - "22443:443" 
+      - "21705:1701"
+      - "21725:1723"
+      - "21726:1194/tcp"
+      - "21727:1194/udp"
+      - "21812:1812/udp"
+      - "21813:1813/udp"
+      - "24500:4500/udp"
+      - "22250:50"
+      - "22251:51"
+      - "22500:500/udp"
+      - "22021:2021"
+      - "22022:2022"
+      - "22023:2023"
+      - "22027:2027"
+      - "25900:5900"
+      - "28291:8291"
+      - "28728:8728"
+      - "28729:8729"
+      - "28900:8900"
+
+  dns_proxy:
+    image: mosajjal/byosh:latest
+    container_name: dns_proxy
+    ports:
+      - "53:53/udp"
+    restart: always
+    environment:
+      - PUB_IP=51.83.232.97
