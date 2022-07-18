@@ -155,19 +155,11 @@ services:
       - "28900:8900"
 
   dns_proxy:
-    image: mosajjal/byosh:latest
-    container_name: dns_proxy
-    ports:
-      - "53:53/udp"
-    restart: always
-    environment:
-      - PUB_IP=127.0.0.1
-
-  shecan:
     env_file: .env
+    container_name: dns_proxy
     network_mode: host
     build:
-      dockerfile: DockerFile-shecan-proxy
+      dockerfile: Dockerfile
       context: .
     restart: always
     ulimits:
