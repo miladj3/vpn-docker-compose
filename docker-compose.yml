@@ -54,24 +54,24 @@ services:
       - SECRET_COUNT=${MTPROTO_SECRET_COUNT}
       - SECRET=${MTPROTO_SECRET}
 
-  # sstp:
-  #   env_file: .env
-  #   image: fernandezcuesta/softethervpn:latest
-  #   container_name: sstp
-  #   restart: always
-  #   ports:
-  #     - ${SSTP_L2TP_PORT_500}:500/udp
-  #     - ${SSTP_L2TP_PORT_4500}:4500/udp
-  #     - ${SSTP_L2TP_PORT_1701}:1701/tcp
-  #     - ${SSTP_OPENVPN_PORT}:1194/udp
-  #     - ${SSTP_PORT}:443/tcp
-  #   environment:
-  #     - PSK=${L2TP_IPSEC_PSK}
-  #     - USERNAME=milad
-  #     - PASSWORD=P@SSWORD
-  #     - SERVER_PWD=P@SSWORD
-  #     - OPENVPN_ENABLED=true
-  #     - SSTP_ENABLED=true
+  sstp:
+    env_file: .env
+    image: fernandezcuesta/softethervpn:latest
+    container_name: sstp
+    restart: always
+    ports:
+      - ${SSTP_L2TP_PORT_500}:500/udp
+      - ${SSTP_L2TP_PORT_4500}:4500/udp
+      - ${SSTP_L2TP_PORT_1701}:1701/tcp
+      - ${SSTP_OPENVPN_PORT}:1194/udp
+      - ${SSTP_PORT}:443/tcp
+    environment:
+      - PSK=${L2TP_IPSEC_PSK}
+      - USERNAME=milad
+      - PASSWORD=P@SSWORD
+      - SERVER_PWD=P@SSWORD
+      - OPENVPN_ENABLED=true
+      - SSTP_ENABLED=true
 
   wireguard:
     image: linuxserver/wireguard
@@ -119,55 +119,55 @@ services:
       - ./passwords:/etc/squid/passwords
     restart: always
 
-  # mikrotik:
-  #   image: evilfreelancer/docker-routeros:6.46.5
-  #   container_name: mikrotik
-  #   restart: unless-stopped
-  #   cap_add:
-  #     - NET_ADMIN
-  #   devices:
-  #     - /dev/net/tun
-  #   ports:
-  #     - "22280:80"
-  #     - "28080:8080"
-  #     - "22221:21"
-  #     - "22222:22"
-  #     - "22223:23"
-  #     - "22443:443"
-  #     - "21705:1701"
-  #     - "21725:1723"
-  #     - "21726:1194/tcp"
-  #     - "21727:1194/udp"
-  #     - "21812:1812/udp"
-  #     - "21813:1813/udp"
-  #     - "24500:4500/udp"
-  #     - "22250:50"
-  #     - "22251:51"
-  #     - "22500:500/udp"
-  #     - "22021:2021"
-  #     - "22022:2022"
-  #     - "22023:2023"
-  #     - "22027:2027"
-  #     - "25900:5900"
-  #     - "28291:8291"
-  #     - "28728:8728"
-  #     - "28729:8729"
-  #     - "28900:8900"
+  mikrotik:
+    image: evilfreelancer/docker-routeros:6.46.5
+    container_name: mikrotik
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    ports:
+      - "22280:80"
+      - "28080:8080"
+      - "22221:21"
+      - "22222:22"
+      - "22223:23"
+      - "22443:443"
+      - "21705:1701"
+      - "21725:1723"
+      - "21726:1194/tcp"
+      - "21727:1194/udp"
+      - "21812:1812/udp"
+      - "21813:1813/udp"
+      - "24500:4500/udp"
+      - "22250:50"
+      - "22251:51"
+      - "22500:500/udp"
+      - "22021:2021"
+      - "22022:2022"
+      - "22023:2023"
+      - "22027:2027"
+      - "25900:5900"
+      - "28291:8291"
+      - "28728:8728"
+      - "28729:8729"
+      - "28900:8900"
 
-  # dns_proxy:
-  #   image: mosajjal/byosh:latest
-  #   container_name: dns_proxy
-  #   ports:
-  #     - "53:53/udp"
-  #   restart: always
-  #   environment:
-  #     - PUB_IP=127.0.0.1
+  dns_proxy:
+    image: mosajjal/byosh:latest
+    container_name: dns_proxy
+    ports:
+      - "53:53/udp"
+    restart: always
+    environment:
+      - PUB_IP=127.0.0.1
 
-  byosh:
+  shecan:
     env_file: .env
     network_mode: host
     build:
-      dockerfile: DockerFile
+      dockerfile: DockerFile-shecan-proxy
       context: .
     restart: always
     ulimits:
