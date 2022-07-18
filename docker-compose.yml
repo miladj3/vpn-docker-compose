@@ -167,7 +167,7 @@ services:
     env_file: .env
     network_mode: host
     build:
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
       context: .
     restart: always
     ulimits:
