@@ -72,8 +72,8 @@ services:
       - SERVER_PWD=P@SSWORD
       - OPENVPN_ENABLED=true
       - SSTP_ENABLED=true
-      - CERT=$(cat /tmp/cert.pem)
-      - KEY=$(cat /tmp/key.pem)
+      - CERT=/tmp/cert.pem
+      - KEY=/tmp/key.pem
 
   wireguard:
     image: linuxserver/wireguard
