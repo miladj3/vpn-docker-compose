@@ -1,5 +1,9 @@
 # vpn-docker-compose
 
+generate CERT for SSTP:
+ > openssl req -nodes -new -x509 -keyout /tmp/key.pem -out /tmp/cert.pem
+
+
 https://www.the-digital-life.com/wireguard-docker/
 
 WireGuard:
