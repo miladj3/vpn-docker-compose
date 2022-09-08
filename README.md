@@ -128,3 +128,12 @@ The command completed successfully.
 > exit
 
 https://cloudinfrastructureservices.co.uk/how-to-install-softether-vpn-server-on-ubuntu-20-04/
+
+> dns server
+# Changing the main DNS configuration file and add the public IP address of the container to the `resolve.conf` file.
+echo "" > /etc/resolv.conf && echo "nameserver Public_IP_Of_Container" >> /etc/resolv.conf
+
+#for prevent access from out of location iran
+./iraccess.sh
+
+//https://github.com/maj0rmil4d/maj0rdns/blob/main/README.md
