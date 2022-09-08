@@ -1,15 +1,27 @@
-FROM alpine:edge
-
-RUN apk add --no-cache py3-pip nginx nginx-mod-stream --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/
-RUN sh -c 'mkdir -p /run/openrc/ && mkdir -p /run/nginx'
-RUN pip3 install --no-cache-dir dnslib
+FROM ubuntu:latest
 
 
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY dns.py /opt/dns.py
-COPY domains /opt/domains
-COPY entrypoint.sh /entrypoint.sh
+RUN apt update
+RUN apt install sniproxy dnsmasq iptables -y
+ADD dnsmasq.conf /etc/dnsmasq.tpl
+ADD sniproxy.conf /etc/sniproxy.conf
+RUN ln -sf /dev/stdout /var/log/sniproxy/sniproxy.log
 
-RUN chmod +x /entrypoint.sh
+EXPOSE 53/udp
+EXPOSE 80
+EXPOSE 443
 
-ENTRYPOINT ["./entrypoint.sh"]
+#public ip of the container
+
+ENV IP 51.83.232.97
+ENV ALLOWED_IP 0.0.0.0/0
+
+CMD echo "Configure iptables..." && \
+    iptables -A INPUT --source ${ALLOWED_IP} --jump ACCEPT && \
+    iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED --jump ACCEPT && \
+    iptables -P INPUT DROP && \
+    iptables -S && \
+    echo "Configure dnsmasq..." && \
+    sed "s/{IP}/${IP}/" /etc/dnsmasq.tpl > /etc/dnsmasq.conf && \
+    echo "Run sniproxy and dnsmasq..." && \
+    dnsmasq -khR & sniproxy -c /etc/sniproxy.conf -f

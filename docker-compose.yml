@@ -156,8 +156,16 @@ services:
 
   dns_proxy:
     env_file: .env
+    cap_add:
+      - NET_ADMIN
     container_name: dns_proxy
     network_mode: host
+    ports:
+      - "53:53/udp"
+      - "443:443"
+      - "80:80"
+    environment:
+      - IP=PublicIpOfContainer
     build:
       dockerfile: Dockerfile
       context: .
